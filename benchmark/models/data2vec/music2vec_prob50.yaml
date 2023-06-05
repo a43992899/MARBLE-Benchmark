@@ -1,0 +1,10 @@
+name: music2vec_prob50
+pre_trained_model_type: data2vec
+pre_trained_folder: out/music2vec/prob50
+token_rate: 50
+target_sr: 16000
+num_features: 768
+n_tranformer_layer: 12
+processor_normalize: true
+huggingface_model_name: null
+  

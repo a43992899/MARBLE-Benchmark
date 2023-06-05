@@ -1,0 +1,107 @@
+dataset:
+  dataset: MAESTRO
+  input_type: audio # [audio, feature]
+  input_dir: data/MAESTRO/hdf5s/maestro
+  metadata_dir: data/MAESTRO/maestro_target
+
+  sliding_window_size_in_sec: 
+    train: 10
+    valid: 10
+    test: 10
+
+  hop_seconds:
+    train: 1
+    valid: 5
+    test: 5
+
+
+model:
+  feature_extractor:
+    pretrain:
+      !include benchmark/models/musichubert_hf/MERT-v1-330M.yaml
+    components:
+      - name: CNN
+        freeze: true
+      - name: Transformer
+        freeze: true # or you can specify the layers in a list
+
+    force_half: true
+    layer: all # [all, 0, 1, 2, ..., $n_tranformer_layer]
+    normalized_weight_sum: true
+    reduction: mean # [mean, max, min, none]
+
+  downstream_structure:
+    components:
+      - name: mlp
+        hidden_layer_sizes: [512]
+        dropout_p: 0.2
+        num_outputs: 88
+
+
+trainer: 
+  # pytorch lightning trainer args
+  auto_lr_find: false
+  accelerator: gpu
+  devices: 1
+  strategy: null # [null, ddp]
+  precision: 16
+  accumulate_grad_batches: 4
+  fast_dev_run: false
+  log_every_n_steps: 50
+  max_epochs: 50 
+
+  # custom args
+  seed: 1234
+  eval_only: false
+  paradigm: probe # [probe, finetune]
+
+
+dataloader:
+  num_workers: 8
+  batch_size:
+    train: 16
+    valid: 16
+    test: 1
+
+
+optimizer:
+  name: torch.optim.Adam
+  l2_weight_decay: 0.0
+  lr: 1e-3
+
+
+scheduler:
+  lr_scheduler_patience: 2
+  earlystop_patience: 5
+
+
+loss:
+  loss_weight: null
+
+
+metric:
+  frame_threshold: 0.5
+
+
+logger:
+  wandb_off: false # turn off wandb
+  wandb_proj_name: Eval_MAESTRO_probing
+  wandb_run_name: MERT-v1-330M
+  wandb_dir: data
+  wandb_sweep: false
+  monitor: valid_f1
+
+
+checkpoint:
+  save_best_to: null
+  eval_ckpt_path: null
+
+
+hp_search:
+  enable: false
+  framework: ray
+  technique: grid_search # [grid_search, random_search, bayesian_optimization, hyperband, asha]
+  search_list: 
+    - name: lr
+      space: [1e-2, 5e-3, 1e-3, 5e-4, 1e-4]
+

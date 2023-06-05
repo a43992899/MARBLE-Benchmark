@@ -1,0 +1,34 @@
+_import:
+  - !include benchmark/tasks/EMO/EMO_base_config.yaml
+
+dataset:
+  pre_extract:
+    accelerator: gpu
+    audio_dir: data/EMO/emomusic/wav
+    output_dir: data/EMO/jukemir_features/jukemir_feature_default
+    keep_folder_structure: true
+    overwrite: true
+
+    audio_loader:
+      crop_to_length_in_sec: 25 # same as the jukemir paper
+
+    feature_extractor:
+      pretrain:
+        !include benchmark/models/jukemir/jukemir.yaml
+      force_half: true
+
+  dataset: EMO
+  input_type: feature # [audio, feature]
+  input_dir: data/EMO/jukemir_features/jukemir_feature_default
+  metadata_dir: data/EMO/emomusic
+
+model:    
+    downstream_structure:
+      components:
+        - name: feature_selector
+          layer: 0 # we only use a single layer (36) as the jukemir paper suggested
+        - name: mlp
+          hidden_layer_sizes: [512]
+          dropout_p: 0.2
+          num_outputs: 10
+  

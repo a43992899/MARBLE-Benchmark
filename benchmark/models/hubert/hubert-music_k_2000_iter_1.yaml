@@ -1,0 +1,10 @@
+name: hubert-music_k_2000_iter_1
+pre_trained_model_type: hubert
+pre_trained_folder: out/hubert_music_ckpt/k_2000_iter_1
+token_rate: 50
+target_sr: 16000
+num_features: 768
+n_tranformer_layer: 12
+processor_normalize: true
+huggingface_model_name: null
+  

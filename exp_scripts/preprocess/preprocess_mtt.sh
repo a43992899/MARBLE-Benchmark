@@ -1,0 +1,1 @@
+python benchmark/tasks/MTT/preprocess.py ./data

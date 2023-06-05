@@ -1,0 +1,111 @@
+command:
+  - python
+  - __main__.py
+  - probe 
+  # NOTE: must specify this parameter to update the argparser
+  - --wandb_sweep
+
+# program: __main__.py
+method: bayes
+metric:
+  name: valid_acc
+  goal: maximize
+parameters:
+  # ---- set sinlge value ----
+  dataset:
+    value: GTZAN
+  feature_dir:
+    value: data/GTZAN/hubert_features/HF_HuBERT_base_MPD_1Kh_HPO-baseline-v2_ckpt_134_250k_feature_layer_all_reduce_mean
+  metadata_dir:
+    value: data/GTZAN
+  audio_dir:
+    value: data/GTZAN/genres
+  fine_tune:
+    value: true
+  num_outputs:
+    value: 10
+  monitor:
+    value: valid_acc
+  progress_bar_refresh_rate:
+    value: 0
+  max_epochs:
+    value: 400
+  lr_scheduler_patience: 
+    distribution: categorical
+    values: 
+      - 1
+      - 2
+  earlystop_patience:
+    value: 5
+  # layer: 
+  #   value: all  
+  # ---- end sinlge value ----
+  # hidden_layer_size:
+  #   value: 512
+      # distribution: categorical
+      # values:
+      # - ""
+      # - 512
+  layer:
+    distribution: categorical
+    values:
+    - "all"
+    - "0"
+    - "1"
+    - "2"
+    - "3"
+    - "4"
+    - "5"
+    - "6"
+    - "7"
+    - "8"
+    - "9"
+    - "10"
+    - "11"
+    - "12"
+  train_sample_duration:
+    value: 15
+  test_sample_duration:
+    value: 30
+  # batch_size:
+  #   distribution: int_uniform
+  #   min: 64
+  #   max: 512
+  batch_size:
+    value: 16
+  accumulate_grad_batches:
+    distribution: categorical
+    values:
+    - 2
+    - 4
+  l2_weight_decay:
+    distribution: categorical
+    values:
+    - 0.0
+    - 0.00001
+    - 0.0001
+  lr:
+    distribution: log_uniform
+    min: -10
+    max: -2
+  dropout_p:
+    distribution: uniform
+    min: 0.2
+    max: 0.8
+  # num_layers:
+  #   distribution: int_uniform
+  #   min: 2
+  #   max: 6
+  # features_start:
+  #   distribution: categorical
+  #   values:
+  #     - 8
+  #     - 16
+  #     - 32
+  #     - 64
+  #     - 128
+  # bilinear:
+  #   distribution: categorical
+  #   values:
+  #     - True
+  #     - False

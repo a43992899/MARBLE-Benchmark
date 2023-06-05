@@ -1,0 +1,6 @@
+name: clmr
+target_sr: 22050
+num_features: 512
+pretrain_folder: benchmark/models/clmr/downloads
+FRAME_LENGTH: 59409
+download_urls: {"clmr_magnatagatune_mlp.zip": "https://github.com/Spijkervet/CLMR/releases/download/2.1/clmr_magnatagatune_mlp.zip"}

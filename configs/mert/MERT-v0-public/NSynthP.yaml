@@ -1,0 +1,44 @@
+_import:
+  - !include benchmark/tasks/NSynth/NSynthP_base_config.yaml
+
+dataset:
+  pre_extract:
+    accelerator: gpu
+    audio_dir: data/NSynth/nsynth-data
+    output_dir: data/NSynth/MERT_features/MERT-v0-public_feature_default
+    keep_folder_structure: true
+    overwrite: true
+
+    feature_extractor:
+      pretrain:
+        !include benchmark/models/musichubert_hf/MERT-v0-public.yaml
+      force_half: false
+      layer: null # null means save features from all layers
+      reduction: mean # [mean, max, min, none]
+    
+    audio_loader:
+      is_mono: true
+      is_normalize: false  # min-max normalization
+      crop_to_length_in_sec: null
+      crop_to_length_in_sample_points: null
+      crop_randomly: false
+      sliding_window_size_in_sec: 30.0
+      sliding_window_overlap_in_percent: 0.0
+
+  dataset: NSynthP
+  input_type: feature # [audio, feature]
+  input_dir: data/NSynth/MERT_features/MERT-v0-public_feature_default
+  metadata_dir: data/NSynth/nsynth-data
+
+model:    
+    downstream_structure:
+      components:
+        - name: feature_selector
+          layer: all # [all, 0, 1, 2, ..., $n_tranformer_layer]
+          # weighted sum is only effective when layer is set to all
+          normalized_weight_sum: true
+        - name: mlp
+          hidden_layer_sizes: [512]
+          dropout_p: 0.2
+          num_outputs: 128
+  

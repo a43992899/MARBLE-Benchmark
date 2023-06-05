@@ -1,0 +1,30 @@
+_import:
+  - !include benchmark/tasks/MTT/MTT_base_config.yaml
+
+dataset:
+  pre_extract:
+    accelerator: gpu
+    audio_dir: data/MTT/mp3
+    output_dir: data/MTT/mule_features/mule_feature_default
+    keep_folder_structure: true
+    overwrite: true
+
+    feature_extractor:
+      pretrain:
+        !include benchmark/models/mule/mule.yaml
+
+  dataset: MTT
+  input_type: feature # [audio, feature]
+  input_dir: data/MTT/mule_features/mule_feature_default
+  metadata_dir: data/MTT
+
+model:    
+    downstream_structure:
+      components:
+        - name: feature_selector
+          layer: 0 # not a transformer model, so layer is set to 0
+        - name: mlp
+          hidden_layer_sizes: [512]
+          dropout_p: 0.2
+          num_outputs: 10
+  

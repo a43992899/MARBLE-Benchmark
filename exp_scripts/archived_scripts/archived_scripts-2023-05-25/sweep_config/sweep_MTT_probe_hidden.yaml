@@ -1,0 +1,105 @@
+command:
+  - python
+  - __main__.py
+  - probe 
+  # NOTE: must specify this parameter to update the argparser
+  - --wandb_sweep
+
+# program: __main__.py
+method: bayes
+metric:
+  name: valid_aucroc
+  goal: maximize
+parameters:
+  # ---- set sinlge value ----
+  dataset:
+    value: MTT
+  feature_dir:
+    # value: data/MTT/hubert_features/HF_HuBERT_base_MPD_1Kh_HPO-baseline-v2_ckpt_134_250k_feature_layer_all_reduce_mean
+    # value: data/MTT/hubert_features/HF_HuBERT_base_MPD_train_1Kh_MuBERT_MPD_1Kh_HPO-v4_crop5s_aug-v4-0.25_ckpt_405_250k_feature_layer_all_reduce_mean
+    value: data/MTT/hubert_features/HF_MuBERT_MPD-1Kh-MusicAll-900h-fma-large_HPO-v4_crop5s_ECD-v8_mix-v3-0.5_tau-0.1_ckpt_191_250000_feature_layer_all_reduce_mean
+  metadata_dir:
+    value: data/MTT
+  num_outputs:
+    value: 50
+  monitor:
+    value: valid_aucroc
+  progress_bar_refresh_rate:
+    value: 0
+  max_epochs:
+    value: 400
+  lr_scheduler_patience: 
+    value: 10
+  earlystop_patience:
+    value: 30
+  n_tranformer_layer:
+    value: 1
+  num_features:
+    # jukebox
+    value: 4800
+  # ---- end sinlge value ----
+  hidden_layer_sizes:
+    # value: "[512,]"
+      distribution: categorical
+      values:
+      - "[]"
+      - "[512,]"
+      - "[512, 256]"
+      - "[512, 256, 128]"
+  layer:
+    value: "0"
+  # layer:
+  #   distribution: categorical
+  #   values:
+  #   - "all"
+  #   - "1"
+  #   - "2"
+  #   - "3"
+  #   - "4"
+  #   - "5"
+  #   - "6"
+  #   - "7"
+  #   - "8"
+  #   - "9"
+  #   - "10"
+  #   - "11"
+  #   - "12"
+    # - "0"
+  batch_size:
+    distribution: int_uniform
+    min: 64
+    max: 1024
+  l2_weight_decay:
+    distribution: categorical
+    values:
+    - 0.0
+    - 0.00001
+    - 0.0001
+  lr:
+    # distribution: log_uniform
+    # min: -6
+    # max: -4
+    min: 0.00001
+    max: 0.01
+  dropout_p:
+    distribution: uniform
+    min: 0.2
+    max: 0.8
+
+  # num_layers:
+  #   distribution: int_uniform
+  #   min: 2
+  #   max: 6
+  # features_start:
+  #   distribution: categorical
+  #   values:
+  #     - 8
+  #     - 16
+  #     - 32
+  #     - 64
+  #     - 128
+  # bilinear:
+  #   distribution: categorical
+  #   values:
+  #     - True
+  #     - False

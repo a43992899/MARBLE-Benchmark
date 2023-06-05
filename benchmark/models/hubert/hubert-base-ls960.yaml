@@ -1,0 +1,10 @@
+name: hubert-base-ls960 
+pre_trained_model_type: hubert-base-ls960
+pre_trained_folder: null
+token_rate: 50
+target_sr: 16000
+num_features: 768
+n_tranformer_layer: 12
+processor_normalize: true
+huggingface_model_name: facebook/hubert-base-ls960
+  

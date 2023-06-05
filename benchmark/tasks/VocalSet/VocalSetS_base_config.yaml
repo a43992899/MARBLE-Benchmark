@@ -1,0 +1,111 @@
+# Path: benchmark/tasks/VocalSet/VocalSetS_base_config.yaml
+# Description: 
+#   Base config for VocalSetS. It show case the usage of probing MERT-v1-95M model on VocalSetS dataset.
+
+dataset:
+  pre_extract:
+    accelerator: gpu
+    audio_dir: data/VocalSet/audio
+    output_dir: data/VocalSet/MERT_features/MERT-v1-95M_feature_default
+    keep_folder_structure: true
+    overwrite: true
+
+    audio_loader:
+      is_mono: true
+      is_normalize: false  # min-max normalization
+      crop_to_length_in_sec: 30
+      crop_to_length_in_sample_points: null
+      crop_randomly: false
+      sliding_window_size_in_sec: 5
+      sliding_window_overlap_in_percent: 0.0
+
+    feature_extractor:
+      pretrain:
+        !include benchmark/models/musichubert_hf/MERT-v1-95M.yaml
+      force_half: false
+      layer: null # null means save features from all layers
+      reduction: mean # [mean, max, min, none]
+
+  dataset: VocalSetS
+  input_type: feature # [audio, feature]
+  input_dir: data/VocalSet/MERT_features/MERT-v1-95M_feature_default
+  metadata_dir: data/VocalSet
+
+
+model:    
+  downstream_structure:
+    components:
+      - name: feature_selector
+        layer: 2 # [all, 0, 1, 2, ..., $n_tranformer_layer]
+        # weighted sum is only effective when layer is set to all
+        normalized_weight_sum: true
+
+      - name: mlp
+        hidden_layer_sizes: [512]
+        dropout_p: 0.2
+        num_outputs: 20
+
+
+trainer: 
+  # pytorch lightning trainer args
+  auto_lr_find: false
+  accelerator: gpu
+  devices: 1
+  strategy: null # [null, ddp]
+  precision: 16
+  accumulate_grad_batches: 1
+  fast_dev_run: false
+  log_every_n_steps: 50
+  max_epochs: 100 
+
+  # custom args
+  seed: 1234
+  eval_only: false
+  paradigm: probe # [probe, finetune]
+
+
+dataloader:
+  num_workers: 3
+  batch_size:
+    train: 64
+    valid: 64
+    test: 64
+
+
+optimizer:
+  name: torch.optim.Adam
+  l2_weight_decay: 0.0
+  lr: 1e-3
+
+
+scheduler:
+  lr_scheduler_patience: 5
+  earlystop_patience: 20
+
+
+loss:
+  loss_weight: null
+
+
+logger:
+  wandb_off: false # turn off wandb
+  wandb_proj_name: Eval_VocalSetS_probing
+  wandb_run_name: null
+  wandb_dir: data
+  wandb_sweep: false
+  monitor: valid_acc
+
+
+checkpoint:
+  save_best_to: null
+  eval_ckpt_path: null
+
+
+hp_search:
+  enable: false
+  framework: ray
+  technique: grid_search # [grid_search, random_search, bayesian_optimization, hyperband, asha]
+  search_list: 
+    - name: lr
+      space: [1e-2, 5e-3, 1e-3, 5e-4, 1e-4]
+

@@ -1,0 +1,20 @@
+pytorch-lightning  # no need to install this on cam
+torchaudio  # should use v0.9 on cam
+transformers
+librosa
+nnAudio
+wandb
+mir_eval
+h5py
+sox
+tqdm
+pandas
+scipy==1.9.1
+numba
+mido
+wget
+jams
+openunmix
+tensorflow # [optional] If you want to use the tensorflow baselines ['musicnn', 'mule']
+# torch_scatter # [optional] We provide non-cuda implementation. For cuda version, check `https://pypi.org/project/torch-scatter/` before installing, and install the correct version according to your pytorch/cuda version, or simply do `conda install pytorch-scatter -c pyg` and let conda fix the version for you
+madmom
