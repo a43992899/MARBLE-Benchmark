@@ -1,7 +1,7 @@
-# Benchmark for Downstream MIR Tasks
+# MARBLE: Music Audio Representation Benchmark for Universal Evaluation
 
 Currently support:
-- Linear probing MAP pretrain/handcrafted features.
+- Linear probing pretrained/handcrafted features.
 - Fewshot inference.
 - Various MIR datasets:
   - `MTT`: magnatagatune, multilabel cls
@@ -13,7 +13,7 @@ Currently support:
   - `VocalSet`: VocalSet, multiclass cls
 
 TODO:
-- Support finetune MAP pretrain model.
+- Support finetuning MAP pretrain model.
 - Support time variant tasks, like transcription.
 
 Please first make sure you are already at the ${PROJECT_ROOT} and have activated your virtual environment.
