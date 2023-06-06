@@ -15,7 +15,6 @@ Currently support:
 TODO:
 - Support finetune MAP pretrain model.
 - Support time variant tasks, like transcription.
-- For more plans visit [notion page](https://www.notion.so/yizhilll/Performance-Evaluation-Build-MIR-Benchmark-64d23b676ffd46e6a0bacb67862828bc)
 
 Please first make sure you are already at the ${PROJECT_ROOT} and have activated your virtual environment.
 ```bash
@@ -38,32 +37,21 @@ bash exp_scripts/download/download_emo.sh
 bash exp_scripts/preprocess/preprocess_emo.sh # You may skip this step for some datasets.
 ```
 
-If you are on yrb-ubuntu, simply do
-```bash
-ln -s /home/yrb/code/MIR-Benchmark/data ./data
-```
-
-(Optional) To download the huggingface model from gdrive
-```bash
-bash exp_scripts/download_HF_with_rclone.sh
-```
 
 ## Extract Features 
-If you only want to extract MAP pretrain features with the default settings, we recommend you to run the below shell scripts.  
+Simply do the following
 ```bash
-bash exp_scripts/extract_features_by_dataset.sh ${HF_CHECKPOINT_DIR} ${MODEL_TYPE} ${OUTPUT_FEAT_ROOT} ${DATASET} ${TARGET_SAMPLE_RATE} ${N_SHARD} ${DEVICE_LIST} ${PROCESSOR_NORMALIZE} ${ACCELERATOR}
+python . extract -c configs/mert/MERT-v1-95M/EMO.yaml
 ```
-This shell script calls `benchmark/extract_bert_features.py`.  
 If you want to change the settings, run below to see help.
 ```bash
-python . extract-hubert-features -h
+python . extract -h
 ```
 
 ## Linear Probing
-You should do `wandb login` first, contact `yizhi` for setting up.  
-If you only want to probe hubert features from a huggingface checkpoint with the default settings, we recommend you to run the below shell scripts. Note that you should [run hubert feature extraction](#extract-hubert-features) first.
+You should do `wandb login` first. Then do
 ```bash
-bash exp_scripts/probe_by_dataset.sh ${HF_CHECKPOINT_DIR} ${MODEL_TYPE} ${OUTPUT_FEAT_ROOT} ${TASK} ${MODEL_SETTING} ${ACCELERATOR} ${ACC_PRECISION} ${WANDB_OFF}
+python . probe -c configs/mert/MERT-v1-95M/EMO.yaml
 ```
 If you want to change the settings, run below to see help.
 ```bash
