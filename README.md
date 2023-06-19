@@ -1,21 +1,24 @@
 # MARBLE: Music Audio Representation Benchmark for Universal Evaluation
 
 Currently support:
-- Linear probing pretrained/handcrafted features.
-- Fewshot inference.
+- Linear probing pretrained features.
 - Various MIR datasets:
   - `MTT`: magnatagatune, multilabel cls
   - `MTG`: MTG-jamendo, multilabel cls
   - `GTZAN`: GTZAN, multiclass cls
   - `GS`: giantsteps, multiclass cls 
   - `EMO`: emomusic, regression
-  - `MAESTRO`: maestro, piano transcription
   - `VocalSet`: VocalSet, multiclass cls
 
-TODO:
-- Support finetuning MAP pretrain model.
-- Support time variant tasks, like transcription.
+TODOs:
+- Support `GTZANBT`: GTZAN Beat Tracking, will be updated soon.
+- Support `MUSDB18`: MUSDB18, source separation, will be updated soon.
+- Support traditional handcrafted features.
+- Support `MAESTRO`: maestro, piano transcription
+- Support lyrics transcription.
+- Support few-shot inference.
 
+## Getting Start
 Please first make sure you are already at the ${PROJECT_ROOT} and have activated your virtual environment.
 ```bash
 export PROJECT_ROOT=/path/to/this/project
@@ -58,5 +61,5 @@ If you want to change the settings, run below to see help.
 python . probe -h
 ```
 
-## Few-shot Inference
-Script is under `benchmark/fewshot.ipynb`. The code is outdated. 
+## Paper:
+[See docs/MARBLE_benchmark.pdf](docs/MARBLE_benchmark.pdf)
