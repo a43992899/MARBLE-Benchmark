@@ -62,4 +62,11 @@ python . probe -h
 ```
 
 ## Paper:
-[See docs/MARBLE_benchmark.pdf](docs/MARBLE_benchmark.pdf)
+```code
+@article{yuan2023marble,
+  title={MARBLE: Music Audio Representation Benchmark for Universal Evaluation},
+  author={Yuan, Ruibin and Ma, Yinghao and Li, Yizhi and Zhang, Ge and Chen, Xingran and Yin, Hanzhi and Zhuo, Le and Liu, Yiqi and Huang, Jiawen and Tian, Zeyue and others},
+  journal={arXiv preprint arXiv:2306.10548},
+  year={2023}
+}
+```
