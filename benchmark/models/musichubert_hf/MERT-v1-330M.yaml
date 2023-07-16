@@ -1,6 +1,6 @@
 name: MERT-v1-330M
 pre_trained_model_type: hubert
-pre_trained_folder: data/hubert_data/HF_MuBERT_large_MPD-130Kh-and-shenqi_HPO-v5_crop5s_grad-8-v5_ckpt_71_65000
+pre_trained_folder: null
 token_rate: 75
 target_sr: 24000
 num_features: 1024
