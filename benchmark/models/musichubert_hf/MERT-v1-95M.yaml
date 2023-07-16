@@ -1,6 +1,6 @@
 name: MERT-v1-95M
 pre_trained_model_type: hubert
-pre_trained_folder: data/hubert_data/HF_MuBERT_base_MPD-10Kh-MusicAll-900h-fma-full-noshit_HPO-v4_crop5s_ECD-v8_mix-v3-0.5_ckpt_136_250000
+pre_trained_folder: none
 token_rate: 75
 target_sr: 24000
 num_features: 768
