@@ -1,6 +1,6 @@
 name: MERT-v1-95M
 pre_trained_model_type: hubert
-pre_trained_folder: none
+pre_trained_folder: null
 token_rate: 75
 target_sr: 24000
 num_features: 768
