@@ -1,4 +1,4 @@
-# export PROJECT_ROOT=~/MIR-Benchmark
+# export PROJECT_ROOT=~/MARBLE-Benchmark
 
 cd $PROJECT_ROOT
 mkdir -p data/MTT

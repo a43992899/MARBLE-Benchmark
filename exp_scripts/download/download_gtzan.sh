@@ -1,9 +1,17 @@
-# export PROJECT_ROOT=~/MIR-Benchmark
+# export PROJECT_ROOT=~/MARBLE-Benchmark
 
 cd $PROJECT_ROOT
 mkdir -p data/GTZAN
 cd data/GTZAN
 ## wget http://opihi.cs.uvic.ca/sound/genres.tar.gz # this link is dead as of 2023-02-18
+
+# Check if ~/.kaggle/kaggle.json exists
+if [ ! -f ~/.kaggle/kaggle.json ]; then
+    echo "Error: ~/.kaggle/kaggle.json does not exist!"
+    echo "Please create your kaggle.json file from https://www.kaggle.com/<username>/account and place it in the current directory, then run this script."
+    exit 1
+fi
+
 pip install kaggle
 
 ## create your kaggle.json file from https://www.kaggle.com/<username>/account, place it in the current directory, and run this script
