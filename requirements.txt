@@ -1,3 +1,5 @@
+Cython
+numpy
 pytorch-lightning  # no need to install this on cam
 torchaudio  # should use v0.9 on cam
 transformers
