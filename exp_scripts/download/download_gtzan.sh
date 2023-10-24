@@ -8,15 +8,13 @@ cd data/GTZAN
 # Check if ~/.kaggle/kaggle.json exists
 if [ ! -f ~/.kaggle/kaggle.json ]; then
     echo "Error: ~/.kaggle/kaggle.json does not exist!"
-    echo "Please create your kaggle.json file from https://www.kaggle.com/<username>/account and place it in the current directory, then run this script."
+    echo "Please create your kaggle.json file from https://www.kaggle.com/<username>/account and place it under ~/.kaggle/kaggle.json, then run this script."
     exit 1
 fi
 
 pip install kaggle
 
 ## create your kaggle.json file from https://www.kaggle.com/<username>/account, place it in the current directory, and run this script
-mkdir ~/.kaggle
-cp ./kaggle.json ~/.kaggle/
 chmod 600 ~/.kaggle/kaggle.json
 kaggle datasets download -d andradaolteanu/gtzan-dataset-music-genre-classification
 unzip gtzan-dataset-music-genre-classification.zip
