@@ -17,6 +17,10 @@ TODOs:
 - Support `MAESTRO`: maestro, piano transcription
 - Support lyrics transcription.
 - Support few-shot inference.
+- Support CICD
+- Support clap
+- Support chord transcription
+- Release out-of-the-box pretrained downstreams for reproduction.
 
 ## Getting Start
 Please first make sure you are already at the ${PROJECT_ROOT} and have activated your virtual environment.
