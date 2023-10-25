@@ -61,6 +61,17 @@ If you want to change the settings, run below to see help.
 python . probe -h
 ```
 
+## Development Workflow
+
+### Branching Strategy
+- **`main` branch**: This branch contains the stable version of the project. All new features and fixes should be developed on separate branches and merged into `main` once they are tested and reviewed.
+  
+- **`dev` branch**: This is the primary development branch where all the features and bug fixes are merged. When the `dev` branch is stable and ready for a new version, it will be merged into the `main` branch.
+
+- **Feature Branches**: For each new feature or improvement, create a new branch from `dev`. The naming convention is `feature/descriptive-name`, e.g., `feature/add-GTZANBT-support`.
+
+- **Bugfix Branches**: If there's a bug to fix, create a branch from `dev`. Name it `bugfix/descriptive-name`, e.g., `bugfix/fix-data-loading-issue`.
+
 ## Paper:
 ```code
 @article{yuan2023marble,

@@ -237,7 +237,7 @@ def iter_emomusic(metadata_only=False):
 
 if __name__ == "__main__":
     parser = ArgumentParser(description='A simple program that greets the user.')
-    parser.add_argument('--dataset_dir', type=str, default="/home/yinghao/MIR-Benchmark/data/EMO",  help='The path of the dataset root')
+    parser.add_argument('--dataset_dir', type=str, default="data/EMO",  help='The path of the dataset root')
     args = parser.parse_args()
 
     PATH = args.dataset_dir

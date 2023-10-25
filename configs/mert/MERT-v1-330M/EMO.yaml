@@ -35,7 +35,7 @@ model:
   downstream_structure:
     components:
       - name: feature_selector
-        layer: 5 # [all, 0, 1, 2, ..., $n_tranformer_layer]
+        layer: 10 # [all, 0, 1, 2, ..., $n_tranformer_layer]
         # weighted sum is only effective when layer is set to all
         normalized_weight_sum: true
 
