@@ -75,7 +75,7 @@ dataloader:
 optimizer:
   name: torch.optim.Adam
   l2_weight_decay: 0.0
-  lr: 1e-3
+  lr: 5e-3
 
 
 scheduler:
