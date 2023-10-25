@@ -32,7 +32,7 @@ model:
   downstream_structure:
     components:
       - name: feature_selector
-        layer: 10 # [all, 0, 1, 2, ..., $n_tranformer_layer]
+        layer: 12 # [all, 0, 1, 2, ..., $n_tranformer_layer]
         # weighted sum is only effective when layer is set to all
         normalized_weight_sum: true
 
@@ -71,7 +71,7 @@ dataloader:
 optimizer:
   name: torch.optim.Adam
   l2_weight_decay: 0.0
-  lr: 1e-3
+  lr: 5e-4
 
 
 scheduler:
