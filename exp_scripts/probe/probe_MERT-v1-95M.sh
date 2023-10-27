@@ -44,7 +44,7 @@ if [ "$OPERATION" == "probe" ]; then
 
     for lr_value in ${lr_list[@]}; do
         for ((i=0; i<${#TASKS[@]}; i++)); do
-            for LAYER in all $(seq 24 -1 0)
+            for LAYER in all $(seq 12 -1 0)
             do
                 python . probe -c configs/mert/MERT-v1-95M/${TASKS[i]}.yaml \
                 -o "optimizer.lr=${lr_value},,model.downstream_structure.components[0].layer='${LAYER}'"
