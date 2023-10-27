@@ -413,3 +413,5 @@ benchmark/models/clmr/downloads
 ########
 ## Ending custom gitignore rules.
 ########
+
+.vscode
