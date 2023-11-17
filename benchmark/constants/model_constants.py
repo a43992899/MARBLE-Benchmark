@@ -1,4 +1,5 @@
 NAME_TO_PRETRAIN_CLASS = {
+    "encodec": "bench.EncodecFeature",
     'hubert': "bench.SpeechHuBERTFeature", 
     'data2vec': "bench.Data2vecFeature",
     'MERT-v0-public': "bench.HuBERTFeature",
@@ -23,6 +24,7 @@ NAME_TO_PRETRAIN_CLASS = {
 }
 
 NAME_TO_EXTRACT_FEATURES_MAIN = {
+    "encodec": "extract_encodec_features_main",
     'hubert': "extract_hubert_features_main",
     'data2vec': "extract_data2vec_features_main",
     'chroma': "extract_handcrafted_features_main",

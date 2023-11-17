@@ -12,9 +12,7 @@ from tqdm import tqdm
 from encodec import EncodecModel
 from encodec.utils import convert_audio
 
-from benchmark.utils.audio_utils import find_audios
-
-
+from benchmark.utils.audio_utils import load_audio, find_audios
 
 
 def select_args(config):
@@ -79,10 +77,8 @@ class EncodecFeature(nn.Module):
         encoded_frame_embedings: tp.List[torch.Tensor] = []
         for offset in range(0, length, stride):
             frame = x[:, :, offset: offset + segment_length]
-            print(frame.shape)
-            frame_embedding = get_audio_seg_embedding(self.model, frame)
+            frame_embedding = self.get_audio_seg_embedding(frame)
             encoded_frame_embedings.append(frame_embedding)
-
 
         # return mean pooling according to time dimension
         if len(encoded_frame_embedings) == 1:
@@ -98,10 +94,9 @@ class EncodecFeature(nn.Module):
         assert input_values.shape[1] == self.model.channels, f'wav.shape[1]={input_values.shape[1]}, but expected {self.model.channels}'
 
         out = self.get_audio_encodec_embeddings(input_values)
+        out = out.cpu().numpy()
 
         return out
-
-
 
 
 def main(config):
@@ -148,7 +143,7 @@ def main(config):
                 continue
             
             # extract features
-            wav = waveform.to(device)
+            wav = waveform.unsqueeze(0).to(device)
             features = feature_extractor(wav)
             
             # save to npy
