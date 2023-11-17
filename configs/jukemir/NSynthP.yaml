@@ -14,7 +14,7 @@ dataset:
 
     feature_extractor:
       pretrain:
-        !include benchmark/models/jukemir/jukemir.yaml
+        !include benchmark/models/jukebox/jukemir.yaml
         force_half: true
 
   dataset: NSynthP
