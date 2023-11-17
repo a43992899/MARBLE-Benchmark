@@ -38,5 +38,5 @@ model:
         - name: mlp
           hidden_layer_sizes: [512]
           dropout_p: 0.2
-          num_outputs: 10
+          num_outputs: 128
   
