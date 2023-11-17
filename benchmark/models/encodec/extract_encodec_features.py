@@ -166,17 +166,3 @@ def main(config):
             if not args.overwrite:
                 assert not os.path.exists(output_file), f"{output_file} exists. If you want to overwrite, please add --overwrite."
             np.save(output_file, features)
-
-    
-    # Load and pre-process the audio waveform
-    wav, sr = torchaudio.load(audio_path)
-    wav = convert_audio(wav, sr, model.sample_rate, model.channels)
-    wav = wav.unsqueeze(0) # [1, 1, n_samples], 第一个维度是 batch_size
-    wav = wav.to(device)
-
-
-    # Extract discrete codes from EnCodec
-    with torch.no_grad():
-        wav_encodec_embs = get_audio_encodec_embeddings(model, wav) # model.encode(wav)
-
-    print(wav_encodec_embs.shape)
