@@ -1,11 +1,11 @@
 _import:
-  - !include benchmark/tasks/VocalSet/VocalSetS_base_config.yaml
+  - !include benchmark/tasks/EMO/EMO_base_config.yaml
 
 dataset:
   pre_extract:
     accelerator: gpu
-    audio_dir: data/VocalSet/audio
-    output_dir: data/VocalSet/clmr_features/clmr_feature_default
+    audio_dir: data/EMO/emomusic/wav
+    output_dir: data/EMO/clmr_features/clmr_feature_default
     keep_folder_structure: true
     overwrite: true
 
@@ -13,10 +13,10 @@ dataset:
       pretrain:
         !include benchmark/models/clmr/clmr.yaml
 
-  dataset: VocalSetS
+  dataset: EMO
   input_type: feature # [audio, feature]
-  input_dir: data/VocalSet/clmr_features/clmr_feature_default
-  metadata_dir: data/VocalSet
+  input_dir: data/EMO/clmr_features/clmr_feature_default
+  metadata_dir: data/EMO/emomusic
 
 model:    
     downstream_structure:
@@ -26,5 +26,5 @@ model:
         - name: mlp
           hidden_layer_sizes: [512]
           dropout_p: 0.2
-          num_outputs: 20
+          num_outputs: 10
   

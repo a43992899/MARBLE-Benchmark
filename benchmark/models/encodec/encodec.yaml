@@ -1,0 +1,6 @@
+name: encodec
+target_sr: 24000
+pretrain_folder: null
+num_features: 128
+target_bandwidth: 6.0
+

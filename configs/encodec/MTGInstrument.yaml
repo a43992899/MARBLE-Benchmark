@@ -1,22 +1,22 @@
 _import:
-  - !include benchmark/tasks/VocalSet/VocalSetS_base_config.yaml
+  - !include benchmark/tasks/MTG/MTGInstrument_base_config.yaml
 
 dataset:
   pre_extract:
     accelerator: gpu
-    audio_dir: data/VocalSet/audio
-    output_dir: data/VocalSet/clmr_features/clmr_feature_default
+    audio_dir: data/MTG/audio-low
+    output_dir: data/MTG/encodec_features/encodec_feature_default
     keep_folder_structure: true
     overwrite: true
 
     feature_extractor:
       pretrain:
-        !include benchmark/models/clmr/clmr.yaml
+        !include benchmark/models/encodec/encodec.yaml
 
-  dataset: VocalSetS
+  dataset: MTGInstrument
   input_type: feature # [audio, feature]
-  input_dir: data/VocalSet/clmr_features/clmr_feature_default
-  metadata_dir: data/VocalSet
+  input_dir: data/MTG/encodec_features/encodec_feature_default
+  metadata_dir: data/MTG/mtg-jamendo-dataset
 
 model:    
     downstream_structure:
@@ -26,5 +26,5 @@ model:
         - name: mlp
           hidden_layer_sizes: [512]
           dropout_p: 0.2
-          num_outputs: 20
+          num_outputs: 40
   
