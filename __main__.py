@@ -7,9 +7,11 @@ import benchmark as bench
 from benchmark.utils.config_utils import add_constructors
 from benchmark.utils.parser_utils import add_extract_args
 from benchmark.utils.parser_utils import add_probe_args
+from benchmark.utils.parser_utils import add_fewshot_args
 from benchmark.utils.parser_utils import add_finetune_args
 from benchmark.extract import main as extract_main
 from benchmark.probe import main as probe_main
+from benchmark.fewshot import main as fewshot_main
 from benchmark.finetune import main as finetune_main
 
 # Add all the constructors we need for yaml files.
@@ -60,6 +62,28 @@ run_probe_parser = subparsers.add_parser(
 run_probe_parser = add_probe_args(run_probe_parser)
 run_probe_parser.set_defaults(
     main_func=probe_main,
+)
+
+################################
+# Handling Fewshot #
+################################
+run_fewshot_parser = subparsers.add_parser(
+    'fewshot',
+    help=f'''Fewshot evaluation on the specified task.
+    Extract n shots from the training set, use the average representation of the n shots as the centroid of the class.
+    Then compute the cosine similarity between the centroid and the test set.
+    The prediction is the class with the highest similarity.
+    You need to specify a config file for the fewshot evaluation.
+    See example in `benchmark/tasks/GTZAN/GTZAN_base_config.yaml`.
+    You can define your own config file, but it must follow the same structure as the example.
+    Currently supported fewshot tasks: {bench.constants.task_constants.FEWSHOT_TASKS}.
+    Currently supported representations: {bench.constants.model_constants.SUPPORTED_REPRESENTATIONS}.
+    Run `python . fewshot -h` for more details.
+    ''',
+)
+run_fewshot_parser = add_fewshot_args(run_fewshot_parser)
+run_fewshot_parser.set_defaults(
+    main_func=fewshot_main,
 )
 
 ################################

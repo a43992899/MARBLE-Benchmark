@@ -71,6 +71,28 @@ def add_probe_args(parser):
     return parser
 
 
+def add_fewshot_args(parser):
+    """Add arguments for probing subparser.
+    """
+    parser = add_config_and_override_args(parser)
+    parser.add_argument(
+        '-n', # number of shots
+        '--n_shot',
+        type=int,
+        default=5,
+        required=False,
+        help='number of shots for fewshot evaluation, default to 5. It is used to compute the centroid of the class.',
+    )
+    parser.add_argument(
+        '-i', # number of iterations
+        '--iter',
+        type=int,
+        default=100,
+        required=False,
+        help='number of iterations for fewshot evaluation, default to 100. Repeat the fewshot evaluation for multiple times and report the average accuracy.',
+    )
+    return parser
+
 def add_finetune_args(parser):
     """Add arguments for finetuning subparser.
     """

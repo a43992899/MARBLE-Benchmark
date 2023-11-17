@@ -52,7 +52,7 @@ def download_model():
     for model_name, link in download_links.items():
         if not os.path.exists(os.path.join(pretrain_folder, model_name)):
             print(f"\nDownloading {model_name} from {link}...")
-            wget.download(link, out=pretrain_folder)
+            os.system(f"wget -O {os.path.join(pretrain_folder, model_name)} {link}")
 
 
 class JukeboxFeature(nn.Module):

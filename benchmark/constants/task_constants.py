@@ -17,3 +17,4 @@ TASK_TYPE_MAPPER = {
 }
 
 SUPPORTED_TASKS = list(TASK_TYPE_MAPPER.keys())
+FEWSHOT_TASKS = [k for k, v in TASK_TYPE_MAPPER.items() if (v == "multiclass" and k != "GTZANBT")]
