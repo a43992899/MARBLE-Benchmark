@@ -5,28 +5,24 @@ dataset:
   pre_extract:
     accelerator: gpu
     audio_dir: data/VocalSet/audio
-    output_dir: data/VocalSet/jukemir_features/jukemir_feature_default
+    output_dir: data/VocalSet/encodec_features/encodec_feature_default
     keep_folder_structure: true
     overwrite: true
 
-    audio_loader:
-      crop_to_length_in_sec: null
-
     feature_extractor:
       pretrain:
-        !include benchmark/models/jukemir/jukemir.yaml
-        force_half: true
+        !include benchmark/models/encodec/encodec.yaml
 
   dataset: VocalSetS
   input_type: feature # [audio, feature]
-  input_dir: data/VocalSet/jukemir_features/jukemir_feature_default
+  input_dir: data/VocalSet/encodec_features/encodec_feature_default
   metadata_dir: data/VocalSet
 
 model:    
     downstream_structure:
       components:
         - name: feature_selector
-          layer: 0 # we only use a single layer (36) as the jukemir paper suggested
+          layer: 0 # not a transformer model, so layer is set to 0
         - name: mlp
           hidden_layer_sizes: [512]
           dropout_p: 0.2

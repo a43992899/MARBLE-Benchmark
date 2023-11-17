@@ -5,17 +5,17 @@ dataset:
   pre_extract:
     accelerator: gpu
     audio_dir: data/NSynth/nsynth-data
-    output_dir: data/NSynth/mule_features/mule_feature_default
+    output_dir: data/NSynth/encodec_features/encodec_feature_default
     keep_folder_structure: true
     overwrite: true
 
     feature_extractor:
       pretrain:
-        !include benchmark/models/mule/mule.yaml
+        !include benchmark/models/encodec/encodec.yaml
 
   dataset: NSynthI
   input_type: feature # [audio, feature]
-  input_dir: data/NSynth/mule_features/mule_feature_default
+  input_dir: data/NSynth/encodec_features/encodec_feature_default
   metadata_dir: data/NSynth/nsynth-data
 
 model:    

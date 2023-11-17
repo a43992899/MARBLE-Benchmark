@@ -410,6 +410,8 @@ benchmark/models/musicnn/MSD_musicnn_big
 # clmr pretrain model
 benchmark/models/clmr/downloads
 
+.vscode
+
 ########
 ## Ending custom gitignore rules.
 ########
