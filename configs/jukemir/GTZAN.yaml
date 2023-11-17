@@ -15,7 +15,7 @@ dataset:
     feature_extractor:
       pretrain:
         !include benchmark/models/jukebox/jukemir.yaml
-        force_half: true
+      force_half: true # you should install apex if set to true
 
   dataset: GTZAN
   input_type: feature # [audio, feature]

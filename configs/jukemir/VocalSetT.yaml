@@ -15,7 +15,7 @@ dataset:
     feature_extractor:
       pretrain:
         !include benchmark/models/jukebox/jukemir.yaml
-        force_half: true
+      force_half: true
 
   dataset: VocalSetT
   input_type: feature # [audio, feature]

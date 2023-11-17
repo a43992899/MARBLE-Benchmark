@@ -15,7 +15,7 @@ dataset:
     feature_extractor:
       pretrain:
         !include benchmark/models/jukebox/jukemir.yaml
-        force_half: true
+      force_half: true
 
   dataset: GS
   input_type: feature # [audio, feature]
@@ -30,5 +30,5 @@ model:
         - name: mlp
           hidden_layer_sizes: [512]
           dropout_p: 0.2
-          num_outputs: 10
+          num_outputs: 24
   
