@@ -25,6 +25,7 @@ Please first make sure you are already at the ${PROJECT_ROOT} and have activated
 export PROJECT_ROOT=/path/to/this/project
 cd ${PROJECT_ROOT}
 conda activate ${YOUR_ENV}
+pip install -r requirements.txt
 ```
 
 ## Download & Preprocess
