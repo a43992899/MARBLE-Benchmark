@@ -5,17 +5,17 @@ dataset:
   pre_extract:
     accelerator: gpu
     audio_dir: data/EMO/emomusic/wav
-    output_dir: data/EMO/clmr_features/clmr_feature_default
+    output_dir: data/EMO/encodec_features/encodec_feature_default
     keep_folder_structure: true
     overwrite: true
 
     feature_extractor:
       pretrain:
-        !include benchmark/models/clmr/clmr.yaml
+        !include benchmark/models/encodec/encodec.yaml
 
   dataset: EMO
   input_type: feature # [audio, feature]
-  input_dir: data/EMO/clmr_features/clmr_feature_default
+  input_dir: data/EMO/encodec_features/encodec_feature_default
   metadata_dir: data/EMO/emomusic
 
 model:    

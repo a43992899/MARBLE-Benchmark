@@ -12,13 +12,15 @@ from tqdm import tqdm
 from encodec import EncodecModel
 from encodec.utils import convert_audio
 
-from benchmark.utils.audio_utils import load_audio, find_audios
+from benchmark.utils.audio_utils import find_audios
 
 
 
 
 def select_args(config):
     args = argparse.Namespace()
+    args.sr = config.dataset.pre_extract.feature_extractor.pretrain.target_sr
+    args.target_bandwidth = config.dataset.pre_extract.feature_extractor.pretrain.target_bandwidth
     args.accelerator = config.dataset.pre_extract.accelerator
     args.output_dir = config.dataset.pre_extract.output_dir
     args.overwrite = config.dataset.pre_extract.overwrite
@@ -91,8 +93,13 @@ class EncodecFeature(nn.Module):
             return torch.mean(torch.cat(encoded_frame_embedings, dim=-1), dim=-1) # [B, 128]
 
     def forward(self, input_values):
-        pass
-        return
+        # dim=3, channels=1
+        assert input_values.dim() == 3, f'wav.dim()={input_values.dim()}, but expected 3. The first dim is batch_size, the second dim is channels, the third dim is length'
+        assert input_values.shape[1] == self.model.channels, f'wav.shape[1]={input_values.shape[1]}, but expected {self.model.channels}'
+
+        out = self.get_audio_encodec_embeddings(input_values)
+
+        return out
 
 
 
@@ -115,14 +122,51 @@ def main(config):
         audio_files.sort() # make sure no intersetction
         audio_files = audio_files[args.shard_rank * len(audio_files) // args.n_shard : (args.shard_rank + 1) * len(audio_files) // args.n_shard]
 
-    device = 'cuda'
-    audio_path = './data/GTZAN/genres/blues/blues.00000.wav'
-
     feature_extractor = EncodecFeature(
-        args.
+        sr=args.sr,
+        target_bandwidth=args.target_bandwidth,
     )
 
     feature_extractor.to(device)
+
+    is_mono = True if feature_extractor.model.channels == 1 else False
+
+    with torch.no_grad():
+        for audio_file in tqdm(audio_files):
+            # load audio
+            try:
+                waveform = load_audio(
+                    audio_file,
+                    target_sr=args.sr,
+                    is_mono=is_mono,
+                    is_normalize=False,
+                    crop_to_length_in_sec=None,
+                    device=device,
+                )
+            except Exception as e:
+                print(f"skip audio {audio_file} because of {e}")
+                continue
+            
+            # extract features
+            wav = waveform.to(device)
+            features = feature_extractor(wav)
+            
+            # save to npy
+            if args.keep_folder_structure:
+                output_file = os.path.join(
+                    args.output_dir,
+                    os.path.relpath(audio_file, args.audio_dir)+'.npy',
+                )
+                os.makedirs(os.path.dirname(output_file), exist_ok=True)
+            else:
+                output_file = os.path.join(
+                    args.output_dir,
+                    os.path.basename(audio_file)+'.npy',
+                )
+            if not args.overwrite:
+                assert not os.path.exists(output_file), f"{output_file} exists. If you want to overwrite, please add --overwrite."
+            np.save(output_file, features)
+
     
     # Load and pre-process the audio waveform
     wav, sr = torchaudio.load(audio_path)

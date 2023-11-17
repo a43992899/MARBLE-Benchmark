@@ -11,6 +11,7 @@ Currently support:
   - `VocalSet`: VocalSet, multiclass cls
 
 TODOs:
+- Fix config files of mule, music2vec, musicnn, handcrafted, clmr
 - Support `GTZANBT`: GTZAN Beat Tracking, will be updated soon.
 - Support `MUSDB18`: MUSDB18, source separation, will be updated soon.
 - Support traditional handcrafted features.
