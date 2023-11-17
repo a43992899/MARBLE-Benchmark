@@ -7,6 +7,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torchaudio
+from einops import rearrange, reduce, repeat
 from tqdm import tqdm
 
 from encodec import EncodecModel
@@ -66,12 +67,11 @@ class EncodecFeature(nn.Module):
         _, channels, length = x.shape
         assert channels > 0 and channels <= 2
         segment_length = self.model.segment_length
-        # print(model.segment_length) # None，所以返回的就是所有的 dimention
         if segment_length is None:
             segment_length = length
             stride = length
         else:
-            stride = self.model.segment_stride  # type: ignore
+            stride = self.model.segment_stride
             assert stride is not None
 
         encoded_frame_embedings: tp.List[torch.Tensor] = []
@@ -82,10 +82,8 @@ class EncodecFeature(nn.Module):
 
         # return mean pooling according to time dimension
         if len(encoded_frame_embedings) == 1:
-            # print(encoded_frame_embedings[0].shape) # [1, 128, 2251]
-            return torch.mean(encoded_frame_embedings[0], dim=-1) # [1, 128] or # [B, 128]
+            return torch.mean(encoded_frame_embedings[0], dim=-1) 
         else:
-            # print(torch.stack(encoded_frame_embedings).shape) # [N, 1, 128, 2251 (n samples)]
             return torch.mean(torch.cat(encoded_frame_embedings, dim=-1), dim=-1) # [B, 128]
 
     def forward(self, input_values):
@@ -94,6 +92,7 @@ class EncodecFeature(nn.Module):
         assert input_values.shape[1] == self.model.channels, f'wav.shape[1]={input_values.shape[1]}, but expected {self.model.channels}'
 
         out = self.get_audio_encodec_embeddings(input_values)
+        out = repeat(out, 'b h -> b t h', t=1)
         out = out.cpu().numpy()
 
         return out

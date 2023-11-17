@@ -88,7 +88,10 @@ class MLPProberBase(pl.LightningModule):
         for component in downstream_structure_components:
             if component.name == 'feature_selector':
                 cfg.layer = component.layer
-                cfg.normalized_weight_sum = component.normalized_weight_sum
+                try:
+                    cfg.normalized_weight_sum = component.normalized_weight_sum
+                except:
+                    cfg.normalized_weight_sum = False
             if component.name == 'mlp':
                 cfg.hidden_layer_sizes = str(component.hidden_layer_sizes)
                 cfg.dropout_p = component.dropout_p
