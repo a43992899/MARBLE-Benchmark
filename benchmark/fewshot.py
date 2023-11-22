@@ -63,7 +63,7 @@ def main(args):
     # force overwrite, since we are using the same config as probe
     # TODO: setup a new config for fewshot
     cfg.trainer.paradigm = 'fewshot'
-    cfg.logger.wandb_proj_name = None
+    cfg.logger.wandb_proj_name = cfg.logger.wandb_proj_name.replace('probing', 'fewshot')
 
     pl.seed_everything(cfg.trainer.seed)
 
