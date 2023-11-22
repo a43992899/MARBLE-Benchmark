@@ -45,6 +45,9 @@ def select_downstream_cfg(cfg):
 
 def get_sample_i(dataset, i):
     feature, label, audio_path = dataset[i]
+    if feature.dim() == 4:
+        # remove batch dim
+        feature = feature.squeeze(0)
     assert feature.dim() == 3, "feature must be 3D tensor, (num_layers, num_frames, feature_dim)"
     feature = feature.mean(dim=0, keepdim=True).mean(dim=1, keepdim=True)
     feature = feature.reshape(-1)
