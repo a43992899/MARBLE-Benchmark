@@ -24,6 +24,8 @@ def get_logger(cfg):
             cfg.logger.wandb_proj_name = f"Probe_{pretrain_model_name}_on_{cfg.dataset.dataset}"
         elif paradigm == 'finetune':
             cfg.logger.wandb_proj_name = f"Finetune_{pretrain_model_name}_on_{cfg.dataset.dataset}"
+        elif paradigm == 'fewshot':
+            cfg.logger.wandb_proj_name = f"Fewshot_{pretrain_model_name}_on_{cfg.dataset.dataset}"
         else:
             raise NotImplementedError 
 

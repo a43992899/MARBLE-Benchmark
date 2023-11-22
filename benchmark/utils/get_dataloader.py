@@ -47,7 +47,7 @@ def get_audio_datasets(args):
     )
 
 
-def get_feature_datasets(args):
+def get_feature_datasets(args, return_audio_path=False):
     Task_Dataset = eval(f"{args.dataset.dataset}FeatureDataset")
     layer = search_enumerate(
         args.model.downstream_structure.components, 
@@ -58,19 +58,22 @@ def get_feature_datasets(args):
         feature_dir=args.dataset.input_dir, 
         metadata_dir=args.dataset.metadata_dir, 
         split="train", 
-        layer=layer
+        layer=layer,
+        return_audio_path=return_audio_path
     )
     valid_dataset = Task_Dataset(
         feature_dir=args.dataset.input_dir, 
         metadata_dir=args.dataset.metadata_dir, 
         split="valid", 
-        layer=layer
+        layer=layer,
+        return_audio_path=return_audio_path
     )
     test_dataset = Task_Dataset(
         feature_dir=args.dataset.input_dir, 
         metadata_dir=args.dataset.metadata_dir, 
         split="test", 
-        layer=layer
+        layer=layer,
+        return_audio_path=return_audio_path
     )
 
     train_collate_fn = train_dataset.train_collate_fn

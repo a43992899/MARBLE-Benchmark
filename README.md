@@ -76,10 +76,12 @@ python . probe -h
 
 ## Paper:
 ```code
-@article{yuan2023marble,
-  title={MARBLE: Music Audio Representation Benchmark for Universal Evaluation},
-  author={Yuan, Ruibin and Ma, Yinghao and Li, Yizhi and Zhang, Ge and Chen, Xingran and Yin, Hanzhi and Zhuo, Le and Liu, Yiqi and Huang, Jiawen and Tian, Zeyue and others},
-  journal={arXiv preprint arXiv:2306.10548},
-  year={2023}
+@inproceedings{
+yuan2023marble,
+title={{MARBLE}: Music Audio Representation Benchmark for Universal Evaluation},
+author={Ruibin Yuan and Yinghao Ma and Yizhi LI and Ge Zhang and Xingran Chen and Hanzhi Yin and Le Zhuo and Yiqi Liu and Jiawen Huang and Zeyue Tian and Binyue Deng and Ningzhi Wang and Chenghua Lin and Emmanouil Benetos and Anton Ragni and Norbert Gyenge and Roger Dannenberg and Wenhu Chen and Gus Xia and Wei Xue and Si Liu and Shi Wang and Ruibo Liu and Yike Guo and Jie Fu},
+booktitle={Thirty-seventh Conference on Neural Information Processing Systems Datasets and Benchmarks Track},
+year={2023},
+url={https://openreview.net/forum?id=2s7ZZUhEGS}
 }
 ```

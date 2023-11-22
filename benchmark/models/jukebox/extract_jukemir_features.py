@@ -199,7 +199,7 @@ def main(config):
             try:
                 waveform = load_audio(
                     audio_file,
-                    target_sr= config.JUKEBOX_SAMPLE_RATE,
+                    target_sr= config.JUKEBOX_SAMPLE_RATE, # TODO: fix this, cannot find the sample rate in the config
                     is_mono=True,
                     is_normalize=True, # the same as jukemir
                     # NOTE: jukemir actually crop all audio to 25s for EMO, MTT, GTZAN, GS

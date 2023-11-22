@@ -1,6 +1,11 @@
-import wandb
+from tqdm import tqdm
+import random
 import argparse
+
+import wandb
+import numpy as np
 import torch
+from sklearn.metrics import accuracy_score, confusion_matrix
 import pytorch_lightning as pl
 
 import benchmark as bench
@@ -21,13 +26,30 @@ def normalize(x):
 def get_class_centroids(class_data, num_shots):
     class_centroids = dict()
     for label, features in class_data.items():
-        features = torch.tensor(np.array(features))
+        # turn list of tensor features into tensor
+        features = torch.stack(features)
         # sample num_shots features
         if features.shape[0] > num_shots:
             features = features[random.sample(range(features.shape[0]), num_shots)]
         features /= features.norm(dim=-1, keepdim=True)
         class_centroids[label] = features.mean(dim=0, keepdim=True)
     return class_centroids
+
+def select_downstream_cfg(cfg):
+    ret_dict = dict()
+    downstream_structure_components = cfg.model.downstream_structure.components
+    for component in downstream_structure_components:
+        if component.name == 'feature_selector':
+            ret_dict['layer'] = component.layer
+    return ret_dict
+
+def get_sample_i(dataset, i):
+    feature, label, audio_path = dataset[i]
+    assert feature.dim() == 3, "feature must be 3D tensor, (num_layers, num_frames, feature_dim)"
+    feature = feature.mean(dim=0, keepdim=True).mean(dim=1, keepdim=True)
+    feature = feature.reshape(-1)
+    label = label.item()
+    return feature, label, audio_path
 
 def main(args):
     cfg = load_config(args.config, namespace=True)
@@ -38,22 +60,22 @@ def main(args):
 
     cfg._runtime = argparse.Namespace() # runtime info
 
-    assert cfg.trainer.paradigm == 'probe', "paradigm must be probe for probe.py"
+    cfg.trainer.paradigm = 'fewshot'
+
     pl.seed_everything(cfg.trainer.seed)
 
     logger = get_logger(cfg)
 
     (train_dataset, _, _), \
     (valid_dataset, _, _), \
-    (test_dataset, _, _)  = get_feature_datasets(cfg)
+    (test_dataset, _, _)  = get_feature_datasets(cfg, return_audio_path=True)
 
     class_data = dict()
 
+    selected_dict = select_downstream_cfg(cfg)
+
     for i in range(len(train_dataset)):
-        feature, label, audio_path = train_dataset[i]
-        # TODO: 重写
-        if feature.shape[0] != 768:  # cat all layers to one vector
-            feature = feature.reshape(-1)
+        feature, label, audio_path = get_sample_i(train_dataset, i)
         if label not in class_data:
             class_data[label] = []
         class_data[label].append(feature)
@@ -68,9 +90,8 @@ def main(args):
         class_centroids = torch.cat([class_centroids[i] for i in range(10)])
         class_centroids = normalize(class_centroids)
         results, labels, paths = [], [], []
-        for feature, label, audio_path in test_dataset:
-            if feature.shape[0] != 768:  # cat all layers to one vector
-                feature = feature.reshape(-1)
+        for i in range(len(test_dataset)):
+            feature, label, audio_path = get_sample_i(test_dataset, i)
             feature = normalize(feature)
             probs = (feature @ class_centroids.T).softmax(dim=-1)
             top_prob, top_label = probs.topk(1, dim=-1)
@@ -83,6 +104,7 @@ def main(args):
     print(f"Accuracy: {all_acc.mean():.4f} +- {all_acc.std():.4f}")
 
     # TODO: wandb log
+    logger.log_metrics({'fewshot_acc': all_acc.mean(), 'fewshot_acc_std': all_acc.std()})
 
     wandb.finish()
 

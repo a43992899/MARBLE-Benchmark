@@ -118,40 +118,6 @@ class AudioDataset(data.Dataset):
             sampling_rate=self.sample_rate,
             padding=True).input_values[0]
     
-    # def __getitem__(self, index):
-    #     if self.split == 'train':
-    #         return self.__getitem__train(index)
-    #     else:
-    #         return self.__getitem__test(index)
-        
-    # def __getitem__train(self, index):
-    #     audio_path = self.metadata.iloc[index][0]
-    #     audio = load_audio(os.path.join(self.audio_dir, audio_path), 
-    #         target_sr = self.sample_rate,
-    #         is_mono = True,
-    #         is_normalize =  True,
-    #     )
-
-    #     # sample a duration of audio from random start
-    #     if self.sample_duration is not None:  
-    #         # if audio is shorter than sample_duration, pad it with zeros
-    #         if audio.shape[1] <= self.sample_duration:  
-    #             audio = F.pad(audio, (0, self.sample_duration - audio.shape[1]), 'constant', 0)
-    #         else:
-    #             random_start = np.random.randint(0, audio.shape[1] - self.sample_duration)
-    #             audio = audio[:, random_start:random_start+self.sample_duration]
-        
-    #     # preprocess and reshaping
-    #     audio_features = self.process_wav(audio)
-
-    #     # # convert
-    #     # audio_features = self.processor(audio, return_tensors="pt", sampling_rate=self.cfg.target_sr, padding=True).input_values[0]
-        
-    #     label = self.class2id[audio_path.split('/')[0]]
-    #     if self.return_audio_path:
-    #         return audio_features, label, audio_path
-    #     return audio_features, label
-    
     def __getitem__(self, index):
         audio_path = self.metadata.iloc[index][0]
         audio = load_audio(os.path.join(self.audio_dir, audio_path), 
