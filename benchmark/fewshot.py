@@ -83,10 +83,10 @@ def main(args):
             class_data[label] = []
         class_data[label].append(feature)
     
-    all_acc = []
+    # repeat the experiment for many times, since different centroid initialization will lead to different results
     repeat_times = args.iter
     num_shots = args.n_shot
-    # repeat the experiment for many times, since different centroid initialization will lead to different results
+    all_acc = []
     for _ in tqdm(range(repeat_times)):
         # compute class centroids
         class_centroids = get_class_centroids(class_data, num_shots)
@@ -107,7 +107,7 @@ def main(args):
     print(f"Accuracy: {all_acc.mean():.4f} +- {all_acc.std():.4f}")
 
     # TODO: wandb log
-    logger.log_metrics({'fewshot_acc': all_acc.mean(), 'fewshot_acc_std': all_acc.std()})
+    logger.log_metrics({'test_acc': all_acc.mean(), 'test_acc_std': all_acc.std(), 'repeat_times': repeat_times, 'num_shots': num_shots})
 
     wandb.finish()
 
