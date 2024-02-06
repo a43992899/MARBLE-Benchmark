@@ -8,6 +8,7 @@ from benchmark.tasks.EMO.EMO_prober import EMOProber
 from benchmark.tasks.MAESTRO.MAESTRO_prober import MAESTROProber
 from benchmark.tasks.MUSDB18.MUSDB18_prober import MUSDB18Prober
 from benchmark.tasks.GTZAN.GTZANBT_prober import GTZANBTProber
+from benchmark.tasks.MEDLEYDB.MEDLEYDB_prober import MEDLEYDBProber
 
 MTTProber = ProberForBertUtterCLS
 GTZANProber = ProberForBertUtterCLS
@@ -19,7 +20,3 @@ NSynthIProber = ProberForBertUtterCLS
 NSynthPProber = ProberForBertUtterCLS
 VocalSetSProber = ProberForBertUtterCLS
 VocalSetTProber = ProberForBertUtterCLS
-
-
-
-
