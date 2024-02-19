@@ -16,6 +16,7 @@ from benchmark.tasks.MTG.MTGInstrument_dataset import FeatureDataset as MTGInstr
 from benchmark.tasks.MTG.MTGMood_dataset import FeatureDataset as MTGMoodFeatureDataset # , AudioDataset as MTGMoodAudioDataset
 from benchmark.tasks.MTG.MTGTop50_dataset import FeatureDataset as MTGTop50FeatureDataset # , AudioDataset as MTGTop50AudioDataset
 from benchmark.tasks.MUSDB18.MUSDB18_dataset import FixedSourcesTrackFolderDataset, aug_from_str
+from benchmark.tasks.MEDLEYDB.MEDLEYDB_dataset import MEDLEYDBAudioDataset
 from torch.utils.data import DataLoader, Dataset
 import torch
 
@@ -31,14 +32,15 @@ def get_audio_datasets(args):
             "sample_rate": args.target_sr,
         }
         source_augmentations = aug_from_str(["gain", "channelswap"])
-        train_dataset = FixedSourcesTrackFolderDataset(split='train', seq_duration=6, source_augmentations=source_augmentations, random_chunks=True, random_track_mix=True, **dataset_kwargs)
-        valid_dataset = FixedSourcesTrackFolderDataset(split='valid', seq_duration=None, samples_per_track=1, **dataset_kwargs)
-        test_dataset = FixedSourcesTrackFolderDataset(split='test', seq_duration=None, samples_per_track=1, **dataset_kwargs)
+        train_dataset = FixedSourcesTrackFolderDataset(split="train", seq_duration=6, source_augmentations=source_augmentations, random_chunks=True, random_track_mix=True, **dataset_kwargs)
+        valid_dataset = FixedSourcesTrackFolderDataset(split="valid", seq_duration=None, samples_per_track=1, **dataset_kwargs)
+        test_dataset = FixedSourcesTrackFolderDataset(split="test", seq_duration=None, samples_per_track=1, **dataset_kwargs)
     else:
         Task_Dataset = eval(f"{args.dataset.dataset}AudioDataset")
         train_dataset = Task_Dataset(args, split="train")
         valid_dataset = Task_Dataset(args, split="valid")
         test_dataset = Task_Dataset(args, split="test")
+        train_collate_fn = getattr(Task_Dataset, "collate_fn", None)
 
     return (
         (train_dataset, train_sampler, train_collate_fn), 
@@ -50,27 +52,25 @@ def get_audio_datasets(args):
 def get_feature_datasets(args):
     Task_Dataset = eval(f"{args.dataset.dataset}FeatureDataset")
     layer = search_enumerate(
-        args.model.downstream_structure.components, 
-        name="feature_selector", 
-        key="layer"
+        args.model.downstream_structure.components, name="feature_selector", key="layer"
     )
     train_dataset = Task_Dataset(
-        feature_dir=args.dataset.input_dir, 
-        metadata_dir=args.dataset.metadata_dir, 
-        split="train", 
-        layer=layer
+        feature_dir=args.dataset.input_dir,
+        metadata_dir=args.dataset.metadata_dir,
+        split="train",
+        layer=layer,
     )
     valid_dataset = Task_Dataset(
-        feature_dir=args.dataset.input_dir, 
-        metadata_dir=args.dataset.metadata_dir, 
-        split="valid", 
-        layer=layer
+        feature_dir=args.dataset.input_dir,
+        metadata_dir=args.dataset.metadata_dir,
+        split="valid",
+        layer=layer,
     )
     test_dataset = Task_Dataset(
-        feature_dir=args.dataset.input_dir, 
-        metadata_dir=args.dataset.metadata_dir, 
-        split="test", 
-        layer=layer
+        feature_dir=args.dataset.input_dir,
+        metadata_dir=args.dataset.metadata_dir,
+        split="test",
+        layer=layer,
     )
 
     train_collate_fn = train_dataset.train_collate_fn
@@ -80,49 +80,47 @@ def get_feature_datasets(args):
     train_sampler, valid_sampler, test_sampler = None, None, None
 
     return (
-        (train_dataset, train_sampler, train_collate_fn), 
-        (valid_dataset, valid_sampler, valid_collate_fn), 
-        (test_dataset, test_sampler, test_collate_fn)
+        (train_dataset, train_sampler, train_collate_fn),
+        (valid_dataset, valid_sampler, valid_collate_fn),
+        (test_dataset, test_sampler, test_collate_fn),
     )
 
 
-dataset_functions = {
-    'feature': get_feature_datasets,
-    'audio': get_audio_datasets
-}
+dataset_functions = {"feature": get_feature_datasets, "audio": get_audio_datasets}
 
 
 def get_dataloaders(args):
     dataset_type = args.dataset.input_type
 
     if dataset_type in dataset_functions:
-        (train_dataset, train_sampler, train_collate_fn), \
-        (valid_dataset, valid_sampler, valid_collate_fn), \
-        (test_dataset, test_sampler, test_collate_fn) = dataset_functions[dataset_type](args)
+        (
+            (train_dataset, train_sampler, train_collate_fn),
+            (valid_dataset, valid_sampler, valid_collate_fn),
+            (test_dataset, test_sampler, test_collate_fn),
+        ) = dataset_functions[dataset_type](args)
     else:
         raise NotImplementedError(f"get_dataloaders() of dataset type {dataset_type} not implemented")
 
     train_loader = DataLoader(
-        train_dataset, 
-        batch_size=args.dataloader.batch_size.train, 
-        shuffle=True, 
-        num_workers=args.dataloader.num_workers, 
-        collate_fn=train_collate_fn
+        train_dataset,
+        batch_size=args.dataloader.batch_size.train,
+        shuffle=True,
+        num_workers=args.dataloader.num_workers,
+        collate_fn=train_collate_fn,
     )
     valid_loader = DataLoader(
-        valid_dataset, 
-        batch_size=args.dataloader.batch_size.valid, 
-        shuffle=False, 
-        num_workers=args.dataloader.num_workers, 
-        collate_fn=test_collate_fn
+        valid_dataset,
+        batch_size=args.dataloader.batch_size.valid,
+        shuffle=False,
+        num_workers=args.dataloader.num_workers,
+        collate_fn=test_collate_fn,
     )
     test_loader = DataLoader(
-        test_dataset, 
-        batch_size=args.dataloader.batch_size.test, 
-        shuffle=False, 
-        num_workers=args.dataloader.num_workers, 
-        collate_fn=test_collate_fn
+        test_dataset,
+        batch_size=args.dataloader.batch_size.test,
+        shuffle=False,
+        num_workers=args.dataloader.num_workers,
+        collate_fn=test_collate_fn,
     )
 
     return train_loader, valid_loader, test_loader
-
