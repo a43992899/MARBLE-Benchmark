@@ -1,0 +1,4 @@
+name: yue
+target_sr: 16000
+pretrain_folder: benchmark/models/yue
+num_features: 4096

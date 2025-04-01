@@ -11,6 +11,7 @@ def main(args):
     from benchmark.models.clmr.extract_clmr_features import main as extract_clmr_features_main
     from benchmark.models.mule.extract_mule_features import main as extract_mule_features_main
     from benchmark.models.hubert.extract_hubert_features import main as extract_speech_hubert_features_main #hubert
+    from benchmark.models.yue.extract_yue_features import main as extract_yue_features_main
 
     config = load_config(args.config, namespace=True)
 
