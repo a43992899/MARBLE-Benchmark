@@ -52,7 +52,8 @@ NAME_TO_EXTRACT_FEATURES_MAIN = {
     "music2vec_prob80": "extract_data2vec_audio_features_main",
     "music2vec_prob50": "extract_data2vec_audio_features_main",
     "music2vec_target12": "extract_data2vec_audio_features_main",
-    "music2vec_span15": "extract_data2vec_audio_features_main"   
+    "music2vec_span15": "extract_data2vec_audio_features_main",
+    "yue": "extract_yue_features_main",     
 }
 
 SUPPORTED_REPRESENTATIONS = list(NAME_TO_EXTRACT_FEATURES_MAIN.keys())
