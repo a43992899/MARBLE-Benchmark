@@ -14,6 +14,7 @@ TASK_TYPE_MAPPER = {
     "EMO": "regression",
     "GTZANBT": "multiclass",
     "MUSDB18": "regression",
+    "MEDLEYDB": "multilabel",
 }
 
 SUPPORTED_TASKS = list(TASK_TYPE_MAPPER.keys())
